@@ -1,9 +1,15 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Optional
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from fastapi.requests import Request
+
 
 app = FastAPI()
-
+# Mount static và template
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 province_codes = {
     "001": "Hà Nội",
@@ -91,8 +97,8 @@ class CCCDInput(BaseModel):
 
 
 @app.get("/")
-def root():
-    return {"message": "Welcome to VN-ID Finder!"}
+def homepage(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/lookup")
