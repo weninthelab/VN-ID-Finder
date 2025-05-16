@@ -90,6 +90,11 @@ class CCCDInput(BaseModel):
     cccd: str = Field(..., min_length=12, max_length=12, pattern=r"^\d{12}$")
 
 
+@app.get("/")
+def root():
+    return {"message": "Welcome to VN-ID Finder!"}
+
+
 @app.post("/lookup")
 def analyze_cccd(input: CCCDInput):
     cccd = input.cccd
